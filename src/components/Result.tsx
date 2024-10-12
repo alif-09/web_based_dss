@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import Table from './Table'; // Import the Table component
+import Table from './Table'; // Import table component
 
 interface ResultProps {
   steps: { title: string; data: any }[];
