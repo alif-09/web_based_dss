@@ -8,7 +8,7 @@ interface CalculatorProps {
   tableData: number[][]; // Data tabel untuk alternatif
   weights: number[]; // Bobot untuk kriteria
   types: string[]; // Tipe untuk kriteria (benefit/cost)
-  method: 'saw' | 'wp'|'topsis'; // Metode yang dipilih
+  method: 'saw' | 'wp'|'topsis'|'ahp'; // Metode yang dipilih
 }
 
 const Calculator: React.FC<CalculatorProps> = ({ tableData, weights, types, method }) => {

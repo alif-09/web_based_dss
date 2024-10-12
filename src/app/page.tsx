@@ -5,18 +5,18 @@ import MethodSelection from '../components/MethodSelection';
 import Calculator from '../components/Calculator';
 
 const MainPage: React.FC = () => {
-  const [selectedMethod, setSelectedMethod] = useState('wp'); // Default method
+  const [selectedMethod, setSelectedMethod] = useState<'saw' | 'wp' | 'topsis'|'ahp'>('wp'); // Default method
   const [weights, setWeights] = useState<number[]>([50, 50]);
   const [types, setTypes] = useState<string[]>(['benefit', 'benefit']);
   const [tableData, setTableData] = useState<number[][]>([]);
   const [shouldCalculate, setShouldCalculate] = useState(false); // State for calculation trigger
 
   // Handle method selection change
-  const handleMethodSelect = (method: string) => {
+  const handleMethodSelect = (method: 'saw' | 'wp' | 'topsis' | 'ahp') => {
     setSelectedMethod(method);
     setTableData([]); // Reset table data when method changes
     setShouldCalculate(false); // Reset calculation trigger when method changes
-  };
+  };  
 
   // Handle form submission with rows, columns, weights, types, and values
   const handleFormSubmit = (data: {
