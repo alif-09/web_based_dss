@@ -5,9 +5,10 @@ interface InputFormProps {
     rows: number;
     cols: number;
     weights: number[];
-    comparison: number[][][];
+
     types: string[];
     values: number[][];
+    
   }) => void;
   onReset: () => void;
   method: string;
@@ -23,7 +24,7 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
   const [tableData, setTableData] = useState<number[][]>([]);
   const [weights, setWeights] = useState<number[]>([]);
   const [types, setTypes] = useState<string[]>([]);
-  const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
+  const inputRefs = useRef<(React.RefObject<HTMLInputElement> | null)[]>(Array(rows * cols).fill(null).map(() => React.createRef<HTMLInputElement>()));
   const [values, setValues] = useState<number[][]>([[], []]);
   const incrementRows = () => setRows(rows + 1);
   const decrementRows = () => rows > 2 && setRows(rows - 1);
@@ -137,6 +138,7 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
       weights,
       types,
       values: tableData,
+      
     };
 
     
@@ -155,22 +157,22 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
     switch (e.key) {
       case "ArrowUp":
         if (rowIndex > 0) {
-          inputRefs.current[currentIndex - cols]?.focus();
+          (inputRefs.current[currentIndex - cols] as React.RefObject<HTMLInputElement>).current?.focus();
         }
         break;
       case "ArrowDown":
         if (rowIndex < rows - 1) {
-          inputRefs.current[currentIndex + cols]?.focus();
+          (inputRefs.current[currentIndex + cols] as React.RefObject<HTMLInputElement>).current?.focus();
         }
         break;
       case "ArrowLeft":
         if (colIndex > 0) {
-          inputRefs.current[currentIndex - 1]?.focus();
+          (inputRefs.current[currentIndex - 1] as React.RefObject<HTMLInputElement>).current?.focus();
         }
         break;
       case "ArrowRight":
         if (colIndex < cols - 1) {
-          inputRefs.current[currentIndex + 1]?.focus();
+          (inputRefs.current[currentIndex + 1] as React.RefObject<HTMLInputElement>).current?.focus();
         }
         break;
       default:
@@ -306,7 +308,7 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
             {weights.map((weight, index) => (
               <td key={index} className="px-6 py-3">
                 <input
-                  ref={(el) => (inputRefs.current[index] = el)}
+                 ref={inputRefs.current[index]} 
                   type="number"
                   value={weight}
                   onChange={(e) => handleWeightChange(e, index)}
@@ -364,7 +366,7 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
               {row.map((cell, colIndex) => (
                 <td key={colIndex} className="px-6 py-2">
                   <input
-                    ref={(el) => (inputRefs.current[rowIndex * cols + colIndex] = el)}
+                    ref= {(inputRefs.current[rowIndex * cols + colIndex])}
                     type="number"
                     value={tableData[rowIndex][colIndex]}
                     onChange={(e) => handleInputChange(e, rowIndex, colIndex)}
