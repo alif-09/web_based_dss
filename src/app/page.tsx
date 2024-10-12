@@ -1,15 +1,15 @@
-"use client";
+"use client"; // Add this if you're using Next.js 13 or later
 import React, { useState } from 'react';
 import InputForm from '../components/Input'; // General InputForm
 import MethodSelection from '../components/MethodSelection';
 import Calculator from '../components/Calculator';
 
 const MainPage: React.FC = () => {
-  const [selectedMethod, setSelectedMethod] = useState('wp'); // Ubah ke 'SAW' sebagai default
+  const [selectedMethod, setSelectedMethod] = useState('wp'); // Default method
   const [weights, setWeights] = useState<number[]>([50, 50]);
   const [types, setTypes] = useState<string[]>(['benefit', 'benefit']);
   const [tableData, setTableData] = useState<number[][]>([]);
-  const [shouldCalculate, setShouldCalculate] = useState(false); // New state for calculation trigger
+  const [shouldCalculate, setShouldCalculate] = useState(false); // State for calculation trigger
 
   // Handle method selection change
   const handleMethodSelect = (method: string) => {
@@ -24,12 +24,20 @@ const MainPage: React.FC = () => {
     cols: number;
     weights: number[];
     types: string[];
-    values: number[][];
+    values: number[][]; // Make sure the types are correct
   }) => {
     setWeights(data.weights); // Set weights
     setTypes(data.types); // Set types (benefit/cost)
     setTableData(data.values); // Set table data
     setShouldCalculate(true); // Trigger calculation after data submission
+  };
+
+  // Reset function to clear all inputs
+  const handleReset = () => {
+    setWeights([50, 50]); // Reset to default weights
+    setTypes(['benefit', 'benefit']); // Reset to default types
+    setTableData([]); // Clear table data
+    setShouldCalculate(false); // Reset calculation trigger
   };
 
   return (
@@ -40,7 +48,7 @@ const MainPage: React.FC = () => {
       <MethodSelection onSelectMethod={handleMethodSelect} selectedMethod={selectedMethod} />
 
       {/* InputForm based on selected method */}
-      <InputForm onCalculate={handleFormSubmit} method={selectedMethod} />
+      <InputForm onCalculate={handleFormSubmit} onReset={handleReset} method={selectedMethod} />
 
       {/* Render Calculator Component if valid table data and the calculate trigger is true */}
       {shouldCalculate && tableData.length > 0 && tableData[0].length > 0 && (
