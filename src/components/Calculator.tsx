@@ -2,6 +2,7 @@ import React from 'react';
 import { calculateSAW } from '../utils/saw'; // Adjust the path as necessary
 import { calculateWP } from '../utils/wp'; // Import calculateWP function
 import { calculateTOPSIS } from '../utils/topsis';
+import { calculateAHP } from '../utils/ahp';
 import Result from './Result';
 
 interface CalculatorProps {
@@ -33,9 +34,12 @@ const Calculator: React.FC<CalculatorProps> = ({ tableData, weights, types, meth
         case 'wp':
           calculationResult = calculateWP(inputData); // Call the WP calculation function
           break;
-          case 'topsis':
-            calculationResult = calculateTOPSIS(inputData); // Call the WP calculation function
-            break;
+        case 'topsis':
+          calculationResult = calculateTOPSIS(inputData); // Call the WP calculation function
+          break;
+        case 'ahp':
+          calculationResult = calculateAHP(inputData);
+          break
         default:
           calculationResult = null;
           break;

@@ -1,43 +1,62 @@
-"use client"; // Add this if you're using Next.js 13 or later
+"use client"; // Ensure this is at the very top
 import React, { useState } from 'react';
 import InputForm from '../components/Input'; // General InputForm
+import AHPInputForm from '../components/AhpInput'; // Import the AHPInputForm
 import MethodSelection from '../components/MethodSelection';
 import Calculator from '../components/Calculator';
 
 const MainPage: React.FC = () => {
-  const [selectedMethod, setSelectedMethod] = useState<'saw' | 'wp' | 'topsis'|'ahp'>('wp'); // Default method
+  const [selectedMethod, setSelectedMethod] = useState<'saw' | 'wp' | 'topsis' | 'ahp'>('wp'); // Default method
   const [weights, setWeights] = useState<number[]>([50, 50]);
   const [types, setTypes] = useState<string[]>(['benefit', 'benefit']);
   const [tableData, setTableData] = useState<number[][]>([]);
   const [shouldCalculate, setShouldCalculate] = useState(false); // State for calculation trigger
 
-  // Handle method selection change
   const handleMethodSelect = (method: 'saw' | 'wp' | 'topsis' | 'ahp') => {
     setSelectedMethod(method);
     setTableData([]); // Reset table data when method changes
     setShouldCalculate(false); // Reset calculation trigger when method changes
-  };  
+  };
 
-  // Handle form submission with rows, columns, weights, types, and values
   const handleFormSubmit = (data: {
     rows: number;
     cols: number;
     weights: number[];
     types: string[];
-    values: number[][]; // Make sure the types are correct
+    values: number[][]; // Adjusted according to input format
   }) => {
-    setWeights(data.weights); // Set weights
-    setTypes(data.types); // Set types (benefit/cost)
-    setTableData(data.values); // Set table data
-    setShouldCalculate(true); // Trigger calculation after data submission
+    setWeights(data.weights);
+    setTypes(data.types);
+    setTableData(data.values);
+    setShouldCalculate(true);
   };
 
-  // Reset function to clear all inputs
+  const handleAHPFormSubmit = (data: {
+    criteria: string[];
+    alternatives: string[];
+    pairwiseComparison: {
+      criteria: number[][];
+      alternatives: number[][][];
+    };
+  }) => {
+    const alternativesComparison = data.pairwiseComparison.alternatives;
+  
+    // Example: Use the comparison from the first criterion
+    const selectedCriterionComparison = alternativesComparison[0]; // Choose a specific criterion
+  
+    setWeights(Array(data.alternatives.length).fill(1)); // Equal weights initially
+    setTypes(Array(data.alternatives.length).fill('benefit')); // Assuming all alternatives are 'benefit'
+    
+    // Set tableData with the selected criterion's comparison
+    setTableData(selectedCriterionComparison); // Now this is a number[][]
+    setShouldCalculate(true);
+  };
+  
   const handleReset = () => {
-    setWeights([50, 50]); // Reset to default weights
-    setTypes(['benefit', 'benefit']); // Reset to default types
-    setTableData([]); // Clear table data
-    setShouldCalculate(false); // Reset calculation trigger
+    setWeights([50, 50]);
+    setTypes(['benefit', 'benefit']);
+    setTableData([]);
+    setShouldCalculate(false);
   };
 
   return (
@@ -47,8 +66,12 @@ const MainPage: React.FC = () => {
       {/* Method Selection Component */}
       <MethodSelection onSelectMethod={handleMethodSelect} selectedMethod={selectedMethod} />
 
-      {/* InputForm based on selected method */}
-      <InputForm onCalculate={handleFormSubmit} onReset={handleReset} method={selectedMethod} />
+      {/* Conditionally render InputForm or AHPInputForm based on selected method */}
+      {selectedMethod === 'ahp' ? (
+        <AHPInputForm onCalculate={handleAHPFormSubmit} />
+      ) : (
+        <InputForm onCalculate={handleFormSubmit} onReset={handleReset} method={selectedMethod} />
+      )}
 
       {/* Render Calculator Component if valid table data and the calculate trigger is true */}
       {shouldCalculate && tableData.length > 0 && tableData[0].length > 0 && (
