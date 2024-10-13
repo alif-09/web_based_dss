@@ -1,5 +1,4 @@
 {
-  {
   "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
     "@typescript-eslint/no-unused-vars": "off",
@@ -7,6 +6,4 @@
     "react-hooks/exhaustive-deps": "off",         // Menjadikannya peringatan agar tetap mendapat notifikasi
     "prefer-const": "off"                          // Menonaktifkan prefer-const
   }
-}
-
 }
