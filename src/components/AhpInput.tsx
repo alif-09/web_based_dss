@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 
 interface AHPInputFormProps {
   onCalculate: (data: {
-    criteria: number[];
-    alternatives: number[];
+    criteria: any;
+    alternatives: any;
     criteriaComparison: number[][];
     alternativesComparison: number[][][];
   }) => void;
