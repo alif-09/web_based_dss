@@ -24,8 +24,8 @@ const Calculator: React.FC<CalculatorProps> = ({
   method, 
   criteriaComparison, 
   alternativesComparison,
-  criteria = [], // Default ke array kosong jika tidak diberikan
-  alternatives = [], // Default ke array kosong jika tidak diberikan
+  criteria = [], 
+  alternatives = [],
 }) => {
   const [result, setResult] = React.useState<any>(null);
 
@@ -41,7 +41,6 @@ const Calculator: React.FC<CalculatorProps> = ({
 
       let calculationResult;
 
-      // Tentukan metode perhitungan berdasarkan pilihan yang dipilih
       switch (method) {
         case 'saw':
           calculationResult = calculateSAW(inputData);
@@ -53,34 +52,18 @@ const Calculator: React.FC<CalculatorProps> = ({
           calculationResult = calculateTOPSIS(inputData);
           break;
         case 'ahp':
-          // Periksa apakah criteriaComparison dan alternativesComparison diberikan untuk AHP
           if (criteriaComparison && alternativesComparison) {
-            // Pastikan tidak ada input kosong
             if (criteriaComparison.length === 0 || alternativesComparison.length === 0) {
-              console.error("Criteria and alternatives comparisons cannot be empty");
+              setResult(null); // Mengatur result ke null jika input tidak valid
               return; // Hentikan eksekusi lebih lanjut
             }
-
-            // Tampilkan matriks perbandingan kriteria dan alternatif
-            console.log("Matriks Perbandingan Kriteria:");
-            console.table(criteriaComparison);
-
-            console.log("Matriks Perbandingan Alternatif:");
-            alternativesComparison.forEach((comparison, index) => {
-              console.log(`Matriks Perbandingan untuk Kriteria ${index + 1}:`);
-              console.table(comparison);
-            });
-
-            console.log("Tipe Kriteria:");
-            console.log(types);
-
-            // Hitung AHP
             calculationResult = calculateAHP(alternatives, criteria, {
               criteria: criteriaComparison,
               alternatives: alternativesComparison,
             });
           } else {
             console.error("AHP requires criteriaComparison and alternativesComparison");
+            setResult(null); // Mengatur result ke null jika input tidak valid
             return; // Hentikan eksekusi lebih lanjut
           }
           break;
@@ -89,23 +72,22 @@ const Calculator: React.FC<CalculatorProps> = ({
           break;
       }
 
-      // Set hasil perhitungan
-      setResult(calculationResult);
+      setResult(calculationResult); // Mengatur hasil perhitungan
     }
   }, [tableData, weights, types, method, criteriaComparison, alternativesComparison]);
 
-  return (
-    <div className="mt-4">
-      {method === 'ahp' && result ? (
-        <AHPResult
-          steps={result.steps}
-          result={result.result}
-          consistencyResults={result.consistencyResults}
-        />
-      ) : (
-        result && <Result steps={result.steps} />
-      )}
-    </div>
+  // Mengembalikan hasil perhitungan jika ada
+  if (!result) return null; // Jika tidak ada hasil, tidak perlu render apa pun
+
+  // Jika ada hasil, render sesuai metode
+  return method === 'ahp' ? (
+    <AHPResult
+      steps={result.steps}
+      result={result.result}
+      consistencyResults={result.consistencyResults}
+    />
+  ) : (
+    <Result steps={result.steps} />
   );
 };
 

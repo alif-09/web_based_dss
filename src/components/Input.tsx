@@ -31,11 +31,7 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
   const incrementCols = () => setCols(cols + 1);
   const decrementCols = () => cols > 2 && setCols(cols - 1);
   const [results, setResults] = useState(null);
-  const [criteriaCount, setCriteriaCount] = useState(2);
-  const [alternativesCount, setAlternativesCount] = useState(2);
-  const [criteria, setCriteria] = useState<string[]>([]);
-  const [alternatives, setAlternatives] = useState<string[]>([]);
-  const [pairwiseComparison, setPairwiseComparison] = useState<number[][][]>([]);
+
   // const inputRefs = useRef<(HTMLInputElement | null)[]>([]);
   useEffect(() => {
     generateTable();

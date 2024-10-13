@@ -29,6 +29,13 @@ export const calculateAHP = (alternatives, criteria, pairwiseComparisons) => {
         throw new Error("Invalid input: alternatives comparison matrices are required.");
     }
 
+    // Step: Isi otomatis alternatif jika kosong
+    if (!alternatives || alternatives.length === 0) {
+        // Menggunakan jumlah baris dari perbandingan alternatif pertama untuk membuat alternatif otomatis
+        const numberOfAlternatives = alternativesComparison[0].length;
+        alternatives = Array.from({ length: numberOfAlternatives }, (_, i) => `A${i + 1}`);
+    }
+
     const normalizeMatrix = (matrix) => {
         const sumCols = matrix[0].map((_, colIndex) =>
             matrix.reduce((sum, row) => sum + row[colIndex], 0)
@@ -71,8 +78,8 @@ export const calculateAHP = (alternatives, criteria, pairwiseComparisons) => {
         // Hitung CR (jika n > 1)
         const cr = (n > 1) ? (ci / ri[n]) : null;
         return { cr, ci };
-    }; 
-        
+    };
+
     // Step 1: Input Data
     steps.push({
         title: "Input Data",
@@ -95,6 +102,8 @@ export const calculateAHP = (alternatives, criteria, pairwiseComparisons) => {
         data: { normalizedCriteriaMatrix, normalizedAlternativesMatrices },
     });
 
+    
+
     // Step 4: Calculate Weights
     const criteriaWeights = calculateWeights(normalizedCriteriaMatrix);
     const alternativeWeights = normalizedAlternativesMatrices.map(matrix => calculateWeights(matrix));
@@ -103,54 +112,59 @@ export const calculateAHP = (alternatives, criteria, pairwiseComparisons) => {
         data: { criteriaWeights, alternativeWeights },
     });
 
-   // Step 5: Final Scores Calculation (Perbaikan rumus skor alternatif)
-    const finalScores = alternatives.map((alt, altIndex) => {
-        // Skor akhir dihitung dengan mengalikan bobot kriteria dengan rata-rata normalisasi alternatif pada setiap kriteria
-        const score = criteriaWeights.reduce((totalScore, criteriaWeight, i) => {
-            // Bobot alternatif untuk kriteria ke-i
-            const altWeightForCriteria = normalizedAlternativesMatrices[i][altIndex].reduce((sum, value) => sum + value, 0) / normalizedAlternativesMatrices[i][altIndex].length;
-            return totalScore + (altWeightForCriteria * criteriaWeight);
-        }, 0);
+        // Step 6: Consistency Check untuk kriteria
+        const { cr: criteriaCR, ci: criteriaCI } = consistencyCheck(criteriaMatrix, criteriaWeights);
+    
+        let consistencyMessage = "";
+       
+    
+        if (criteriaCR !== null && criteriaCR >= 0.1) {
+            console.warn("Consistency check failed for criteria: CR is too high.");
+        }
+    
+        steps.push({
+            title: "Consistency Check",
+            data: { criteriaCR, criteriaCI, consistencyMessage },
+        });
 
-        return {
-            alternative: alt,
-            score
-        };
-    });
-
-    // Sorting berdasarkan skor
-    finalScores.sort((a, b) => b.score - a.score);
-
-    steps.push({
-        title: "Final Scores",
-        data: { finalScores },
-    });
-
-    // Step 6: Consistency Check untuk kriteria
-    const { cr: criteriaCR, ci: criteriaCI } = consistencyCheck(criteriaMatrix, criteriaWeights);
-    if (criteriaCR !== null && criteriaCR >= 0.1) {
-        console.warn("Consistency check failed for criteria: CR is too high.");
-    }
-
-    steps.push({
-        title: "Consistency Check",
-        data: { criteriaCR, criteriaCI },
-    });
-
-    // Logging untuk debugging
-    console.log("Final Scores:", finalScores);
-    console.log("Criteria Weights:", criteriaWeights);
-
-    // Output tabel dengan peringkat
-    console.table(finalScores.map((result, index) => ({
-        Rank: index + 1,
-        Alternative: result.alternative,
-        Score: result.score.toFixed(4)
-    })));
+    // Step 5: Final Scores Calculation
+const finalScores = alternatives.map((alt, altIndex) => {
+    const score = criteriaWeights.reduce((totalScore, criteriaWeight, i) => {
+        const altWeightForCriteria = alternativeWeights[i][altIndex];
+        return totalScore + altWeightForCriteria * criteriaWeight;
+    }, 0);
 
     return {
-        steps,
-        result: { criteriaWeights, finalScores },
-        consistencyResults: { criteriaCR, criteriaCI }
+        alternative: alt,
+        score,
+        rank: 0 // Inisialisasi rank
     };
+});
+
+// Sorting berdasarkan skor
+finalScores.sort((a, b) => b.score - a.score);
+
+// Menetapkan rank berdasarkan urutan
+finalScores.forEach((result, index) => {
+    result.rank = index + 1; // Peringkat dimulai dari 1
+});
+
+// Menambahkan langkah untuk final scores dengan rank
+steps.push({
+    title: "Final Scores",
+    data: { finalScores },
+});
+
+// Output tabel dengan peringkat
+console.table(finalScores.map((result) => ({
+    Rank: result.rank,
+    Alternative: result.alternative,
+    Score: result.score.toFixed(4) // Tampilkan dengan 4 desimal
+})));
+
+return {
+    steps,
+    result: { criteriaWeights, finalScores },
+    consistencyResults: { criteriaCR, criteriaCI }
+};
 };

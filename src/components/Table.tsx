@@ -23,7 +23,7 @@ const Table: React.FC<TableProps> = ({ headers = [], data = [], stepTitle }) => 
         <tr className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-400 uppercase tracking-wide text-xs divide-x divide-gray-300 dark:divide-gray-600">
           {headers.length > 0 ? (
             headers.map((header, index) => (
-              <th key={index} className="px-6 py-3 bg-gray-100 dark:bg-gray-800"> {/* Background hanya di header */}
+              <th key={index} className="px-6 py-3">
                 {header}
               </th>
             ))
@@ -36,7 +36,7 @@ const Table: React.FC<TableProps> = ({ headers = [], data = [], stepTitle }) => 
         {/* Render table data */}
         {data.length > 0 ? (
           data.map((row, rowIndex) => (
-            <tr key={rowIndex} className="divide-x divide-gray-300 dark:divide-gray-600"> {/* Tidak ada background di baris data */}
+            <tr key={rowIndex} className="divide-x divide-gray-300 dark:divide-gray-600">
               {row.map((cell, colIndex) => (
                 <td key={colIndex} className="px-6 py-3">
                   {cell}
