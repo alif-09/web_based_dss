@@ -14,7 +14,7 @@ const MethodSelection: React.FC<MethodSelectionProps> = ({ selectedMethod, onSel
   return (
     <div className="mb-4">
       <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-        Choose the Method:
+        Pilih Metode:
       </label>
       <select
         value={selectedMethod} // Gunakan selectedMethod dari props
