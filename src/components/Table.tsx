@@ -32,7 +32,7 @@ const Table: React.FC<TableProps> = ({ headers = [], data = [], stepTitle }) => 
           )}
         </tr>
       </thead>
-      <tbody className="divide-y divide-gray-300 dark:divide-gray-600">
+      <tbody className="divide-y divide-gray-300 dark:divide-gray-600 bg-white">
         {/* Render table data */}
         {data.length > 0 ? (
           data.map((row, rowIndex) => (

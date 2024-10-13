@@ -4,6 +4,8 @@ import InputForm from '../components/Input'; // General InputForm component
 import AHPInputForm from '../components/AhpInput'; // Import AHPInputForm
 import MethodSelection from '../components/MethodSelection';
 import Calculator from '../components/Calculator';
+import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 const MainPage: React.FC = () => {
   const [selectedMethod, setSelectedMethod] = useState<'saw' | 'wp' | 'topsis' | 'ahp'>('wp'); // Default method
@@ -73,9 +75,9 @@ const MainPage: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-4">Decision Support System (DSS)</h1>
-
+    //<div className="container mx-auto p-4">
+    <div className="w-full min-h-screen bg-background">
+      <Header />
       {/* Method Selection Component */}
       <MethodSelection onSelectMethod={handleMethodSelect} selectedMethod={selectedMethod} />
 
@@ -97,6 +99,7 @@ const MainPage: React.FC = () => {
           alternativesComparison={alternativesComparison} 
         />
       )}
+      <Footer />
     </div>
   );
 };

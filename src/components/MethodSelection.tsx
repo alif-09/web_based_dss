@@ -12,8 +12,9 @@ const MethodSelection: React.FC<MethodSelectionProps> = ({ selectedMethod, onSel
   };
 
   return (
-    <div className="mb-4">
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+    <div className="w-full px-5 my-4 bg-background">
+      <div className='container mx-auto'>
+      <label className="block text-md font-medium text-gray-700 dark:text-gray-300 mb-2">
         Pilih Metode:
       </label>
       <select
@@ -26,6 +27,7 @@ const MethodSelection: React.FC<MethodSelectionProps> = ({ selectedMethod, onSel
         <option value="topsis">TOPSIS</option>
         <option value="ahp">Analytic Hierarchy Process (AHP)</option>
       </select>
+      </div>
     </div>
   );
 };

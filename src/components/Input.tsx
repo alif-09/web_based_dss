@@ -196,8 +196,9 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
   };
 
   return (
-    <div className="space-y-4 flex flex-col">
-      <table className="max-w-20">
+    <div className="space-y-4 flex flex-col px-5">
+      <div className='w-full container mx-auto'>
+      <table className="max-w-20 mb-4">
         <tbody>
           <tr>
             <td className="text-left pr-2">Rows</td>
@@ -380,7 +381,7 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
       <div className="flex justify mt-3">
         <button
           onClick={handleReset}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md focus:outline-none"
+          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md focus:outline-none mr-4"
         >
           Reset
         </button>
@@ -390,6 +391,7 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
         >
           Calculate
         </button>
+      </div>
       </div>
     </div>
   );

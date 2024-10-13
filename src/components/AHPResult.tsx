@@ -143,7 +143,7 @@ const AHPResult: React.FC<AHPResultProps> = ({ steps, result, consistencyResults
     };
 
     return (
-        <div>
+        <div className='container mx-auto px-5 ml-15 mb-4'>
             {steps.map((step, index) => (
                 <div key={index}>
                     <h4> <br></br></h4>
@@ -151,6 +151,7 @@ const AHPResult: React.FC<AHPResultProps> = ({ steps, result, consistencyResults
                 </div>
             ))}
         </div>
+        
     );
 };
 
