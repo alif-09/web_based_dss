@@ -2,15 +2,12 @@ import React, { useState, useEffect } from "react";
 
 interface AHPInputFormProps {
   onCalculate: (data: {
-    criteria: number[][];
-    alternatives: number[][][];
+    criteria: number[];
+    alternatives: number[];
     criteriaComparison: number[][];
     alternativesComparison: number[][][];
   }) => void;
   onReset: () => void;
-  method: string;
-  isAHP?: boolean; // New prop to indicate if AHP is selected
-  onAHPDataChange?: (data: number[][]) => void;
 }
 
 const AHPInputForm: React.FC<AHPInputFormProps> = ({ onCalculate, onReset }) => {
