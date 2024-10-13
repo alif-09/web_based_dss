@@ -35,18 +35,18 @@ const AHPInputForm: React.FC<AHPInputFormProps> = ({ onCalculate, onReset }) => 
   }, [numCriteria, numAlternatives]);
 
   const generateCriteriaComparison = () => {
-    const newComparison = Array.from({ length: numCriteria }, (_, i) =>
-      Array.from({ length: numCriteria }, (_, j) => (i === j ? 1 : 0))
-    );
+    // Menggunakan number[][] karena hasil pembagian dapat berupa nilai desimal
+const newComparison: number[][] = Array.from({ length: numCriteria }, (_, i) =>
+  Array.from({ length: numCriteria }, (_, j) => (i === j ? 1 : 0))
+);
 
-    for (let i = 0; i < numCriteria; i++) {
-      for (let j = 0; j < numCriteria; j++) {
-        if (i !== j) {
-          newComparison[i][j] = criteriaComparison[i]?.[j] || 1; // Maintain previous value or set to 1 if undefined
-          newComparison[j][i] = 1 / newComparison[i][j]; // Maintain reciprocal
-        }
-      }
-    }
+for (let i = 0; i < numCriteria; i++) {
+  for (let j = i + 1; j < numCriteria; j++) { // Loop mulai dari j = i + 1
+    newComparison[i][j] = criteriaComparison[i]?.[j] || 1; // Menggunakan nilai atau default 1
+    newComparison[j][i] = 1 / newComparison[i][j]; // Timbal balik
+  }
+}
+    
 
     setCriteriaComparison(newComparison);
   };
@@ -54,20 +54,30 @@ const AHPInputForm: React.FC<AHPInputFormProps> = ({ onCalculate, onReset }) => 
   const generateAlternativesComparison = () => {
     const newAlternativesComparisons = Array.from({ length: numCriteria }, (_, criterionIndex) => {
       return Array.from({ length: numAlternatives }, (_, i) =>
-        Array.from({ length: numAlternatives }, (_, j) => (i === j ? 1 : 0))
-      ).map((row, rowIndex) => {
+        Array.from({ length: numAlternatives }, (_, j) => (i === j ? 1 : 1)) // Semua elemen awalnya 1
+      );
+    });
+  
+    // Perbarui perbandingan berdasarkan perbandingan alternatif sebelumnya
+    for (let criterionIndex = 0; criterionIndex < numCriteria; criterionIndex++) {
+      for (let rowIndex = 0; rowIndex < numAlternatives; rowIndex++) {
         for (let colIndex = 0; colIndex < numAlternatives; colIndex++) {
           if (rowIndex !== colIndex) {
-            row[colIndex] = alternativesComparison[criterionIndex]?.[rowIndex]?.[colIndex] || 1; // Maintain previous value or set to 1 if undefined
-            row[colIndex] = row[colIndex]; // Maintain reciprocal
+            // Ambil nilai sebelumnya dari alternativesComparison jika ada, atau set default ke 1
+            const previousValue = alternativesComparison[criterionIndex]?.[rowIndex]?.[colIndex] || 1;
+            newAlternativesComparisons[criterionIndex][rowIndex][colIndex] = previousValue;
+  
+            // Set reciprocal value (nilai timbal balik) ke 1 / previousValue
+            newAlternativesComparisons[criterionIndex][colIndex][rowIndex] = 1 / previousValue;
           }
         }
-        return row;
-      });
-    });
-
+      }
+    }
+  
+    // Set new comparison state
     setAlternativesComparison(newAlternativesComparisons);
   };
+  
 
   const handleCriteriaComparisonChange = (e: React.ChangeEvent<HTMLSelectElement>, rowIndex: number, colIndex: number) => {
     const newComparison = [...criteriaComparison];
