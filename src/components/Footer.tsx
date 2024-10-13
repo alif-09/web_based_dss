@@ -1,17 +1,17 @@
 import React from 'react';
 import Image from 'next/image'; // Import next/image
-import alif from '../app/pict/alif.jpg'
-import tegar from '../app/pict/tegar.jpg'
-import zhafran from '../app/pict/zhafran.jpg'
+import alif from '../app/pict/alif.jpg';
+import tegar from '../app/pict/tegar.jpg';
+import zhafran from '../app/pict/zhafran.jpg';
 
 const Footer: React.FC = () => {
   return (
     <footer className="bg-gray-800 text-white py-6 w-full mt-8">
-      <div className="container mx-auto text-center">
+      <div className="container mx-auto text-center px-4">
         <p className="text-l font-semibold">
           UTS Decision Support System (DSS) 2024
         </p>
-        <div className="grid grid-cols-3 text-sm gap-4 mb-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 text-sm gap-4 mb-4 mt-4">
           <div className="flex flex-col items-center">
             <Image src={zhafran} alt="Zhafran" width={64} height={64} className="rounded-full mb-2" />
             <p>Muhammad Zhafran Shiddiq</p>

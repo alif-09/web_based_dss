@@ -125,9 +125,9 @@ const AHPInputForm: React.FC<AHPInputFormProps> = ({ onCalculate, onReset }) => 
   };
 
   return (
-    <div className="space-y-4 ml-5 flex flex-col">
-      <div className='w-full container mx-auto ml-10'>
-        <table className="max-w-20">
+    <div className="space-y-4 flex flex-col px-5">
+      <div className='w-full container mx-auto'>
+      <table className="max-w-20 mb-4">
           <tbody>
             {/* Criteria */}
             <tr>
@@ -190,102 +190,103 @@ const AHPInputForm: React.FC<AHPInputFormProps> = ({ onCalculate, onReset }) => 
         </table>
 
         {/* Pairwise Comparison Table for Criteria */}
-        <div>
-          <h2 className="text-lg font-semibold">Pairwise Comparison for Criteria</h2>
-          <table className="min-w-full text-sm text-gray-900 dark:text-gray-100 text-center divide-x divide-gray-200 dark:divide-gray-700">
-            <thead className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 uppercase tracking-wide text-xs">
-              <tr>
-                <th className="px-4 py-2">Criteria</th>
-                {Array.from({ length: numCriteria }, (_, index) => (
-                  <th key={index} className="px-4 py-2">{`C${index + 1}`}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody className='bg-white'>
-              {criteriaComparison.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  <td className="px-4 py-2">{`C${rowIndex + 1}`}</td>
-                  {row.map((cell, colIndex) => (
-                    <td key={colIndex} className="px-4 py-2">
-                      {rowIndex < colIndex ? (
-                        <select
-                          value={criteriaComparison[rowIndex][colIndex]}
-                          onChange={(e) => handleCriteriaComparisonChange(e, rowIndex, colIndex)}
-                          className="bg-gray-700 text-white"
-                        >
-                          {comparisonOptions.map(option => (
-                            <option key={option.value} value={option.value}>
-                              {option.label}
-                            </option>
-                          ))}
-                        </select>
-                      ) : (
-                        <span>{cell}</span>
-                      )}
-                    </td>
+<div>
+  <h2 className="text-lg font-semibold">Pairwise Comparison for Criteria</h2>
+  <table className="min-w-full table-fixed text-sm text-gray-900 dark:text-gray-100 text-center divide-x divide-gray-200 dark:divide-gray-700">
+    <thead className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 uppercase tracking-wide text-xs">
+      <tr>
+        <th className="px-7 py-3 whitespace-nowrap border-r border-gray-200 dark:border-gray-700">Criteria</th>
+        {Array.from({ length: numCriteria }, (_, index) => (
+          <th key={index} className="px-4 py-2">{`C${index + 1}`}</th>
+        ))}
+      </tr>
+    </thead>
+    <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+      {criteriaComparison.map((row, rowIndex) => (
+        <tr key={rowIndex}>
+          <td className="px-4 py-2">{`C${rowIndex + 1}`}</td>
+          {row.map((cell, colIndex) => (
+            <td key={colIndex} className="px-4 py-2">
+              {rowIndex < colIndex ? (
+                <select
+                  value={criteriaComparison[rowIndex][colIndex]}
+                  onChange={(e) => handleCriteriaComparisonChange(e, rowIndex, colIndex)}
+                  className="bg-gray-700 text-white w-full"
+                >
+                  {comparisonOptions.map(option => (
+                    <option key={option.value} value={option.value}>
+                      {option.label}
+                    </option>
                   ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Pairwise Comparison Table for Alternatives */}
-        <div>
-          <h2 className="text-lg font-semibold">Pairwise Comparison for Alternatives</h2>
-          {Array.from({ length: numCriteria }, (_, criterionIndex) => (
-            <div key={criterionIndex} className="mt-4">
-              <h3 className="text-md font-semibold">{`Criterion C${criterionIndex + 1}`}</h3>
-              <table className="min-w-full text-sm text-gray-900 dark:text-gray-100 text-center divide-x divide-gray-200 dark:divide-gray-700">
-                <thead className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 uppercase tracking-wide text-xs">
-                  <tr>
-                    <th className="px-4 py-2">Alternatives</th>
-                    {Array.from({ length: numAlternatives }, (_, index) => (
-                      <th key={index} className="px-4 py-2">{`A${index + 1}`}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody className='bg-white'>
-                  {alternativesComparison[criterionIndex]?.map((row, rowIndex) => (
-                    <tr key={rowIndex}>
-                      <td className="px-4 py-2">{`A${rowIndex + 1}`}</td>
-                      {row.map((cell, colIndex) => (
-                        <td key={colIndex} className="px-4 py-2">
-                          {rowIndex < colIndex ? (
-                            <select
-                              value={alternativesComparison[criterionIndex][rowIndex][colIndex]}
-                              onChange={(e) => handleAlternativesComparisonChange(e, criterionIndex, rowIndex, colIndex)}
-                              className="bg-gray-700 text-white"
-                            >
-                              {comparisonOptions.map(option => (
-                                <option key={option.value} value={option.value}>
-                                  {option.label}
-                                </option>
-                              ))}
-                            </select>
-                          ) : (
-                            <span>{cell}</span>
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                </select>
+              ) : (
+                <span>{cell}</span>
+              )}
+            </td>
           ))}
-        </div>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+
+{/* Pairwise Comparison Table for Alternatives */}
+<div>
+  <h2 className="text-lg font-semibold">Pairwise Comparison for Alternatives</h2>
+  {Array.from({ length: numCriteria }, (_, criterionIndex) => (
+    <div key={criterionIndex} className="mt-4">
+      <h3 className="text-md font-semibold">{`Criterion C${criterionIndex + 1}`}</h3>
+      <table className="min-w-full table-fixed text-sm text-gray-900 dark:text-gray-100 text-center divide-x divide-gray-200 dark:divide-gray-700">
+        <thead className="bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 uppercase tracking-wide text-xs">
+          <tr>
+            <th className="px-4 py-2">Alternatives</th>
+            {Array.from({ length: numAlternatives }, (_, index) => (
+              <th key={index} className="px-4 py-2">{`A${index + 1}`}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="bg-white dark:bg-gray-900 divide-y divide-gray-200 dark:divide-gray-700">
+          {alternativesComparison[criterionIndex]?.map((row, rowIndex) => (
+            <tr key={rowIndex}>
+              <td className="px-4 py-2">{`A${rowIndex + 1}`}</td>
+              {row.map((cell, colIndex) => (
+                <td key={colIndex} className="px-4 py-2">
+                  {rowIndex < colIndex ? (
+                    <select
+                      value={alternativesComparison[criterionIndex][rowIndex][colIndex]}
+                      onChange={(e) => handleAlternativesComparisonChange(e, criterionIndex, rowIndex, colIndex)}
+                      className="bg-gray-700 text-white w-full"
+                    >
+                      {comparisonOptions.map(option => (
+                        <option key={option.value} value={option.value}>
+                          {option.label}
+                        </option>
+                      ))}
+                    </select>
+                  ) : (
+                    <span>{cell}</span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  ))}
+</div>
+
 
         <div className="flex justify mt-3">
           <button
             onClick={handleReset}
-            className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md focus:outline-none mr-2"
+            className="px-4 py-2 bg-gray-500 hover:bg-gray-700 text-white rounded-md focus:outline-none mr-2"
           >
             Reset
           </button>
           <button
             onClick={handleCalculate}
-            className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md focus:outline-none"
+            className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md focus:outline-none"
           >
             Calculate
           </button>

@@ -20,7 +20,7 @@ const MethodSelection: React.FC<MethodSelectionProps> = ({ selectedMethod, onSel
       <select
         value={selectedMethod} // Gunakan selectedMethod dari props
         onChange={handleMethodChange}
-        className="block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600 focus:border-indigo-500"
+        className="block w-full px-4 py-2 border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:focus:ring-indigo-600 focus:border-indigo-500 hover:bg-gray-100 dark:hover:bg-gray-600 hover:border-gray-400 hover:text-gray-800 dark:hover:text-gray-200"
       >
         <option value="wp">Weighted Product (WP)</option>
         <option value="saw">Simple Additive Weighting (SAW)</option>

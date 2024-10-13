@@ -381,13 +381,13 @@ const InputForm: React.FC<InputFormProps> = ({ onCalculate, onReset, method }) =
       <div className="flex justify mt-3">
         <button
           onClick={handleReset}
-          className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-md focus:outline-none mr-4"
+          className="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md focus:outline-none mr-4"
         >
           Reset
         </button>
         <button
           onClick={handleCalculate}
-          className="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-md focus:outline-none"
+          className="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md focus:outline-none"
         >
           Calculate
         </button>
